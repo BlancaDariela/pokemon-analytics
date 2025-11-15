@@ -31,7 +31,7 @@ st.markdown("""
 def get_database():
     try:
         client = MongoClient(
-            st.secrets["MONGO_URI"],
+            "mongodb+srv://admin:1918935@cluster0.zqozcwk.mongodb.net/",
             tls=True,
             tlsAllowInvalidCertificates=True,
             serverSelectionTimeoutMS=5000,
@@ -305,3 +305,4 @@ st.markdown("""
     <p>Proyecto de Cómputo en la Nube | 2024</p>
 </div>
 """, unsafe_allow_html=True)
+
