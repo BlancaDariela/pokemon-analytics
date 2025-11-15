@@ -28,12 +28,8 @@ st.markdown("""
 
 @st.cache_resource
 def get_database():
-    connection_string = "mongodb+srv://admin:TU_PASSWORD@cluster0.zqozcwk.mongodb.net/?retryWrites=true&w=majority"
-    client = pymongo.MongoClient(
-        connection_string,
-        tls=True,
-        tlsAllowInvalidCertificates=True
-    )
+    connection_string = st.secrets["mongo"]["connection_string"]
+    client = pymongo.MongoClient(connection_string)
     return client["pokemon_nube"]["pokemon"]
 
 @st.cache_data
@@ -291,6 +287,7 @@ st.markdown("""
     <p>Proyecto de Cómputo en la Nube | 2024</p>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
