@@ -1,6 +1,5 @@
 import streamlit as st
 import pymongo
-from pymongo import MongoClient
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -29,26 +28,13 @@ st.markdown("""
 
 @st.cache_resource
 def get_database():
-    try:
-        client = MongoClient(
-            "mongodb+srv://admin:1918935@cluster0.zqozcwk.mongodb.net/",
-            tls=True,
-            tlsAllowInvalidCertificates=True,
-            serverSelectionTimeoutMS=5000,
-            connectTimeoutMS=20000,
-            socketTimeoutMS=20000
-        )
-        client.admin.command('ping')
-        return client["pokemon_nube"]["pokemon"]
-    except Exception as e:
-        st.error(f"❌ Error de conexión a MongoDB: {str(e)}")
-        return None
+    connection_string = "mongodb+srv://admin:TU_PASSWORD@cluster0.zqozcwk.mongodb.net/"
+    client = pymongo.MongoClient(connection_string)
+    return client["pokemon_nube"]["pokemon"]
 
 @st.cache_data
 def load_data():
     collection = get_database()
-    if collection is None:
-        return pd.DataFrame()
     data = list(collection.find())
     df = pd.DataFrame(data)
     
@@ -60,11 +46,7 @@ def load_data():
 
 try:
     df = load_data()
-    if len(df) > 0:
-        st.success(f"✅ Conectado exitosamente! {len(df)} pokémon cargados.")
-    else:
-        st.error("❌ No se pudieron cargar los datos.")
-        st.stop()
+    st.success(f"✅ Conectado exitosamente! {len(df)} pokémon cargados.")
 except Exception as e:
     st.error(f"❌ Error al conectar: {e}")
     st.stop()
@@ -305,4 +287,3 @@ st.markdown("""
     <p>Proyecto de Cómputo en la Nube | 2024</p>
 </div>
 """, unsafe_allow_html=True)
-
